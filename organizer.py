@@ -25,3 +25,30 @@ def setup_logging(verbose: bool) -> None:
 def category_for(path: Path) -> str:
     ext = path.suffix.lower()
     for name, extensions in CATEGORIES.items():
+        if ext in extensions:
+            return name
+    return "other"
+
+
+def unique_destination(folder: Path, filename: str) -> Path:
+    candidate = folder / filename
+    if not candidate.exists():
+        return candidate
+    stem = Path(filename).stem
+    suffix = Path(filename).suffix
+    index = 1
+    while True:
+        candidate = folder / f"{stem}_{index}{suffix}"
+        if not candidate.exists():
+            return candidate
+        index += 1
+
+
+def organize(target: Path, dry_run: bool = True) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in sorted(target.iterdir()):
+        if item.is_dir() or item.name.startswith("."):
+            continue
+        category = category_for(item)
+        destination_dir = target / category
+        destination = unique_destination(destination_dir, item.name)
