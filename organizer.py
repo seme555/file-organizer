@@ -52,3 +52,29 @@ def organize(target: Path, dry_run: bool = True) -> dict[str, int]:
         category = category_for(item)
         destination_dir = target / category
         destination = unique_destination(destination_dir, item.name)
+        counts[category] = counts.get(category, 0) + 1
+        logging.info("%s -> %s", item.name, destination.relative_to(target))
+        if not dry_run:
+            destination_dir.mkdir(exist_ok=True)
+            shutil.move(str(item), str(destination))
+    return counts
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Group loose files into category folders."
+    )
+    parser.add_argument(
+        "path",
+        nargs="?",
+        default=".",
+        help="Folder to organize (default: current directory)",
+    )
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="Move files. Without this flag, only a dry-run report is shown.",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true")
+    return parser.parse_args()
+
