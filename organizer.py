@@ -78,3 +78,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("-v", "--verbose", action="store_true")
     return parser.parse_args()
 
+
+def main() -> None:
+    args = parse_args()
+    setup_logging(args.verbose)
+    target = Path(args.path).expanduser().resolve()
+    if not target.is_dir():
+        raise SystemExit(f"Not a directory: {target}")
+
+    dry_run = not args.apply
+    if dry_run:
+        logging.info("Dry run only. Pass --apply to move files.")
+
+    counts = organize(target, dry_run=dry_run)
+    if not counts:
+        logging.info("No loose files found.")
+        return
+
+    logging.info("Summary:")
+    for category, count in sorted(counts.items()):
+        logging.info("  %s: %s", category, count)
+
+
+if __name__ == "__main__":
+    main()
