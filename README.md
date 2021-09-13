@@ -6,3 +6,11 @@ A small Python utility that groups loose files into category folders
 ## Features
 
 - Standard-library only
+- Dry-run by default (safe preview)
+- Collision-safe renaming when a target name already exists
+- Simple logging summary
+
+## Usage
+
+```bash
+# preview what would move
