@@ -14,3 +14,10 @@ A small Python utility that groups loose files into category folders
 
 ```bash
 # preview what would move
+python organizer.py ./sample-folder
+
+# actually move files
+python organizer.py ./sample-folder --apply
+```
+
+## Author
