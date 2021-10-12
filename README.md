@@ -21,3 +21,9 @@ python organizer.py ./sample-folder --apply
 ```
 
 ## Author
+
+Semere Abera — [github.com/seme555](https://github.com/seme555)
+
+## License
+
+MIT
